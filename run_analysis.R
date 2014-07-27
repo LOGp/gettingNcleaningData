@@ -62,12 +62,17 @@ flat_average = function (x) {
 # Z is a list: 1 item is for 1 feature
 Z = lapply(X, flat_average)
 
+# In each item of the list, set the names based on the feature measured
+# Now reorganize the data
+n = length(Z)
+Z_names = names(Z)
+rm(data)
+data = Z[[1]][, 1:2]
+for (i in 1:n) {
+  dimnames(Z[[i]])[[2]] = c("activity", "subject", Z_names[i])
+  data = merge(data, Z[[i]])
+}
+dim(data)
 
-
-ZZ = Z[[1]]
-str(ZZ)
-
-
-
-
-
+# Dump data to text file
+write.csv(data, "tidy_data.csv")
